@@ -1,10 +1,5 @@
 "use client";
-import {
-  useConnectWallet,
-  usePrivy,
-  useSendTransaction,
-  useWallets,
-} from "@privy-io/react-auth";
+import { useConnectWallet, usePrivy, useWallets } from "@privy-io/react-auth";
 import React, { useEffect, useState } from "react";
 import { useLoginToMiniApp } from "@privy-io/react-auth/farcaster";
 import miniappSdk from "@farcaster/miniapp-sdk";
@@ -12,6 +7,8 @@ import miniappSdk from "@farcaster/miniapp-sdk";
 import { Button } from "@/components/ui/button";
 import UserInfo from "@/components/user-info";
 import { FullScreenLoader } from "@/components/ui/fullscreen-loader";
+import { useAccount, useSendTransaction } from "wagmi";
+import { parseEther } from "viem";
 const Home = () => {
   const { ready, authenticated, login, logout, user } = usePrivy();
   const { initLoginToMiniApp, loginToMiniApp } = useLoginToMiniApp();
@@ -83,31 +80,63 @@ const Home = () => {
 export default Home;
 
 const SendTransactionButton = () => {
-  const { sendTransaction } = useSendTransaction();
-
+  // const { sendTransaction } = useSendTransaction();
+  const {
+    data: hash,
+    sendTransactionAsync,
+    isPending,
+    isIdle,
+    isError,
+    isSuccess,
+    error,
+  } = useSendTransaction();
   const { wallets } = useWallets();
   const { connectWallet } = useConnectWallet();
+  const { address, isConnected } = useAccount();
 
   const handleSendTransaction = async () => {
-    await sendTransaction(
-      {
-        to: "0x0000000000000000000000000000000000000000",
-        value: 1,
-        chainId: 8453,
-      },
-      {
-        address: wallets[0].address,
-      }
-    );
+    // await sendTransaction(
+    //   {
+    //     to: "0x0000000000000000000000000000000000000000",
+    //     value: 1,
+    //     chainId: 8453,
+    //   },
+    //   {
+    //     address: wallets[0].address,
+    //   }
+    // );
+
+    await sendTransactionAsync({
+      to: "0x1A3cDE21e27CA9a2670C2c647550D39a72d9637C",
+      value: parseEther("0.00000001"),
+    });
   };
 
   return (
     <div>
       {wallets[0] ? (
         <div>
-          <Button className="w-full my-2" onClick={handleSendTransaction}>
+          <Button
+            className="w-full my-2"
+            onClick={handleSendTransaction}
+            disabled={isPending || isSuccess || isError}
+          >
             Send Transaction
           </Button>
+          {hash && (
+            <div className="flex items-center gap-2">
+              <div className="text-sm text-gray-500">
+                Transaction sent:{" "}
+                <a
+                  href={`https://basescan.org/tx/${hash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  view on basescan
+                </a>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <Button className="w-full my-2" onClick={() => connectWallet()}>
