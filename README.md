@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Privy x MiniApp Starter
 
-## Getting Started
+This is an example Next.js app to demonstrate how you can use Frames alongside Privy's [**Farcaster login**](https://docs.privy.io/guide/guides/farcaster-login) feature to create novel, cross-app experiences for your users.
 
-First, run the development server:
+When a user first opens this app in their Farcaster client a few things happen. Behind the scenes, Privy automatically logs the user in with their Farcaster account, The client injexts the available wallet automatically (Warplet Wallet in Farcaster and Coinbase Wallet in TBA). 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This app is built with [NextJS](https://nextjs.org/), and makes uses of miniapp-sdk [`@farcaster/miniapp-sdk`](https://www.npmjs.com/package/@farcaster/miniapp-sdk)
+
+>Note: If you are looking to use Wagmi in your app, checkout [Miniapp Starter with Wagmi](https://github.com/privy-io/privy-frames-v2-demo/tree/feat/miniapp-v2-wagmi) for a complete implementation.
+## Live Demo
+
+To see this demo in action, share [`https://privy-frames-v2-demo.vercel.app/`](https://privy-frames-v2-demo.vercel.app/) in any Farcaster client that supports Frames (e.g. Farcaster, TBA) and interact with it.
+
+## Setup
+
+1. Configure [a new Privy app](https://dashboard.privy.io/) with [Farcaster login enabled](https://docs.privy.io/guide/react/recipes/misc/farcaster#login-with-farcaster).
+
+2. Fork this repository, clone it, and open it in your command line:
+
+```sh
+git clone https://github.com/<your-github-handle>/privy-frames-v2-demo
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Install the necessary dependencies using your preferred package manager:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+npm i
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Initialize your environment variables by copying the contents of `.env.example.local` to a new `.env.local` file, and fill in the required values. You'll need to set a base URL, and your Privy app ID.
 
-## Learn More
+```sh
+NEXT_PUBLIC_URL=<insert-the-url-for-your-frame>
+PRIVY_APP_ID=<insert-your-privy-app-id>
+```
 
-To learn more about Next.js, take a look at the following resources:
+**That's it!** To run the demo locally, execute `npm run dev` and open [http://localhost:3000](http://localhost:3000).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Testing the frame
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+You can test this Frame using [Farcaster Developer site](https://farcaster.xyz/~/developers/mini-apps/embed) to preview the miniapp. Please note that a `localhost` URL will not work with the developer Tools, so you should set up a public tunnel to your local app using a tool like [`ngrok`](https://ngrok.com/) or [Cloudflare](https://www.cloudflare.com/products/tunnel/).
 
-## Deploy on Vercel
+## Check out
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/page.tsx` to see how to use Privy to seamlessly login a user in a Farcaster frame
