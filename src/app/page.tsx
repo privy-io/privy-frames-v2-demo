@@ -16,7 +16,6 @@ const Home = () => {
   const { initLoginToMiniApp, loginToMiniApp } = useLoginToMiniApp();
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const { wallets } = useWallets();
-  const [isLoading, setIsLoading] = useState(false);
   // an effect to ensure if we are in mini app context
   useEffect(() => {
     if (miniappSdk && !isSDKLoaded) {
@@ -41,7 +40,6 @@ const Home = () => {
           message: result.message,
           signature: result.signature,
         });
-        setIsLoading(false);
       };
       login();
     }
@@ -73,7 +71,6 @@ const Home = () => {
         ) : (
           <div className="flex flex-col gap-2 w-fit mx-auto">
             <Button onClick={login}>Login</Button>
-            {isLoading && <p>Trying to login with farcaster...</p>}
           </div>
         )}
       </div>
