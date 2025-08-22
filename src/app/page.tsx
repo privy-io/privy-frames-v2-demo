@@ -1,22 +1,22 @@
 "use client";
-import {
-  useConnectWallet,
-  usePrivy,
-  useSendTransaction,
-  useWallets,
-} from "@privy-io/react-auth";
+
 import React, { useEffect, useState } from "react";
-import { useLoginToMiniApp } from "@privy-io/react-auth/farcaster";
-import miniappSdk from "@farcaster/miniapp-sdk";
 
 import { Button } from "@/components/ui/button";
 import UserInfo from "@/components/user-info";
 import { FullScreenLoader } from "@/components/ui/fullscreen-loader";
+import SendTransactionButton from "@/components/send-transaction-button";
+
+import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { useLoginToMiniApp } from "@privy-io/react-auth/farcaster";
+import miniappSdk from "@farcaster/miniapp-sdk";
+
 const Home = () => {
-  const { ready, authenticated, login, logout, user } = usePrivy();
+  const { ready, authenticated, login, logout } = usePrivy();
   const { initLoginToMiniApp, loginToMiniApp } = useLoginToMiniApp();
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const { wallets } = useWallets();
+  const [isLoading, setIsLoading] = useState(false);
   // an effect to ensure if we are in mini app context
   useEffect(() => {
     if (miniappSdk && !isSDKLoaded) {
@@ -26,7 +26,7 @@ const Home = () => {
   }, [isSDKLoaded]);
 
   // here we handle the login user automatically with farcaster (removes the need for the user to click the login button, can be removed if you want to use the login button)
-  // when you open in TBA, if the user has linked their farcaster account, they will be logged in automatically
+  // when you open in TBA, if the user has added their TBA wallet to their farcaster account as an verified auth address, they will be logged in automatically
   // change this useEffect to your needs
   useEffect(() => {
     if (ready && !authenticated) {
@@ -41,10 +41,12 @@ const Home = () => {
           message: result.message,
           signature: result.signature,
         });
+        setIsLoading(false);
       };
       login();
     }
   }, [ready, authenticated]);
+
   if (!ready) {
     return <FullScreenLoader />;
   }
@@ -60,20 +62,19 @@ const Home = () => {
         </div>
       )}
 
-      <div>
+      <div className="flex flex-col gap-2">
         {authenticated ? (
-          <div>
+          <div className="flex flex-col gap-2">
             <UserInfo /> <SendTransactionButton />
-            <div className="flex flex-col gap-2">
-              <Button onClick={() => logout()} variant="secondary">
-                Logout
-              </Button>
-            </div>
+            <Button onClick={logout} variant="secondary">
+              Logout
+            </Button>
           </div>
         ) : (
-          <Button className="w-full" onClick={() => login()}>
-            Login
-          </Button>
+          <div className="flex flex-col gap-2 w-fit mx-auto">
+            <Button onClick={login}>Login</Button>
+            {isLoading && <p>Trying to login with farcaster...</p>}
+          </div>
         )}
       </div>
     </div>
@@ -81,39 +82,3 @@ const Home = () => {
 };
 
 export default Home;
-
-const SendTransactionButton = () => {
-  const { sendTransaction } = useSendTransaction();
-
-  const { wallets } = useWallets();
-  const { connectWallet } = useConnectWallet();
-
-  const handleSendTransaction = async () => {
-    await sendTransaction(
-      {
-        to: "0x0000000000000000000000000000000000000000",
-        value: 1,
-        chainId: 8453,
-      },
-      {
-        address: wallets[0].address,
-      }
-    );
-  };
-
-  return (
-    <div>
-      {wallets[0] ? (
-        <div>
-          <Button className="w-full my-2" onClick={handleSendTransaction}>
-            Send Transaction
-          </Button>
-        </div>
-      ) : (
-        <Button className="w-full my-2" onClick={() => connectWallet()}>
-          Connect Wallet
-        </Button>
-      )}
-    </div>
-  );
-};
