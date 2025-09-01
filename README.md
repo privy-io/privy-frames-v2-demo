@@ -1,20 +1,19 @@
-# Privy x Frames v2 Demo
+# Privy x MiniApp Starter
 
-Source: https://github.com/farcasterxyz/frames-v2-demo
+This is an example Next.js app to demonstrate how you can use Frames alongside Privy's [**Farcaster login**](https://docs.privy.io/guide/guides/farcaster-login) feature to create novel, cross-app experiences for your users.
 
-This is an example [**Frame (v2)**](https://docs.farcaster.xyz/developers/frames/v2/) to demonstrate how you can use Frames alongside Privy's [**Farcaster login**](https://docs.privy.io/guide/guides/farcaster-login) feature to create novel, cross-app experiences for your users.
+When a user first opens this app in their Farcaster client a few things happen. Behind the scenes, Privy automatically logs the user in with their Farcaster account, The client injexts the available wallet automatically (Warplet Wallet in Farcaster and Coinbase Wallet in TBA). 
 
-When a user first opens this demo Frame in their Farcaster client a few things happen. Behind the scenes, Privy automatically logs the user in with their Farcaster account, creates an embedded wallet, and creates a smart account for interacting with the "Yoink!" contract. Users can then [Yoink](https://github.com/horsefacts/yoink) without paying for gas fees.
+This app is built with [NextJS](https://nextjs.org/), and makes uses of miniapp-sdk [`@farcaster/miniapp-sdk`](https://www.npmjs.com/package/@farcaster/miniapp-sdk)
 
-This app is built with [NextJS](https://nextjs.org/), and makes uses of libraries like [`@farcaster/frame-sdk`](https://www.npmjs.com/package/@farcaster/frame-sdk) and [`viem`](https://viem.sh/) for interacting with the blockchain and the [Farcaster](https://www.farcaster.xyz/) protocol.
-
+>Note: If you are looking to use Wagmi in your app, checkout [Miniapp Starter with Wagmi](https://github.com/privy-io/privy-frames-v2-demo/tree/feat/miniapp-v2-wagmi) for a complete implementation.
 ## Live Demo
 
-To see this demo in action, share [`https://privy-frames-v2-demo.vercel.app/`](https://privy-frames-v2-demo.vercel.app/) in any Farcaster client that supports Frames (e.g. Warpcast) and interact with it.
+To see this demo in action, share [`https://privy-frames-v2-demo.vercel.app/`](https://privy-frames-v2-demo.vercel.app/) in any Farcaster client that supports Frames (e.g. Farcaster, TBA) and interact with it.
 
 ## Setup
 
-1. Configure [a new Privy app](https://dashboard.privy.io/) with [Farcaster login enabled](https://docs.privy.io/guide/react/recipes/misc/farcaster#login-with-farcaster) and a Base Sepolia smart wallet configuration. https://docs.privy.io/guide/react/wallets/smart-wallets/configuration
+1. Configure [a new Privy app](https://dashboard.privy.io/) with [Farcaster login enabled](https://docs.privy.io/guide/react/recipes/misc/farcaster#login-with-farcaster).
 
 2. Fork this repository, clone it, and open it in your command line:
 
@@ -39,8 +38,8 @@ PRIVY_APP_ID=<insert-your-privy-app-id>
 
 ## Testing the frame
 
-You can test this Frame using [Warpcast Embed Tools](https://warpcast.com/~/developers/frames) to preview the frame interaction. Please note that a `localhost` URL will not work with Warpcast Embed Tools, so you should set up a public tunnel to your local app using a tool like [`ngrok`](https://ngrok.com/) or [Cloudflare](https://www.cloudflare.com/products/tunnel/).
+You can test this Frame using [Farcaster Developer site](https://farcaster.xyz/~/developers/mini-apps/embed) to preview the miniapp. Please note that a `localhost` URL will not work with the developer Tools, so you should set up a public tunnel to your local app using a tool like [`ngrok`](https://ngrok.com/) or [Cloudflare](https://www.cloudflare.com/products/tunnel/).
 
 ## Check out
 
-- `src/components/Demo.tsx` to see how to use Privy to seamlessly login a user in a Farcaster frame
+- `src/page.tsx` to see how to use Privy to seamlessly login a user in a Farcaster frame
